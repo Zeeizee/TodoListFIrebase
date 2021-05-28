@@ -1,0 +1,137 @@
+@import url('https://fonts.googleapis.com/css2?family=Changa:wght@200&display=swap');
+*{
+    padding: 0px;
+    margin: 0px;
+}
+
+body{
+   font-family: 'Changa', sans-serif; 
+   background-color: rgb(248, 248, 248);
+}
+.main-header
+{
+    font-weight: 800;
+    color: #23272B;
+
+}
+.main-header::before{
+      display: block;
+    content: "";
+    height: 4px;
+    width:400px;
+    margin: auto;
+    background-color: rgb(235, 147, 15);
+     border-radius: 50%;
+
+}
+.main-header::after{
+     display: block;
+    content: "";
+    height: 4px;
+    width:400px;
+    margin: auto;
+    background-color: rgb(235, 147, 15);
+     border-radius: 50%;
+
+}
+
+
+.task-input
+{
+    max-width: 500px;
+}
+.list-of-tasks
+{
+height: 300px;
+overflow-y: auto;}
+
+.fa-history
+{
+    color: #23272B
+}
+.task-box 
+{
+    box-shadow:  rgba(94, 92, 92, 0.16) 0px 3px 6px,  rgba(185, 185, 185, 0.23) 0px 3px 6px;
+    /* box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset; */
+
+}
+.taskname li{
+
+}
+.task-box  .fa-check-double
+{
+    color: rgb(15, 165, 1);
+    padding: 5px;
+    
+
+
+}
+.task-box .taskname
+{
+   
+    color: #23272B ;
+    font-size: 1rem;
+    font-weight: 800;
+}
+.task-box .date
+{
+    color: #9a9c9e ;
+    font-size: 0.8rem;
+    
+    
+
+}
+.todobuttons button
+{
+border: none;
+background-color:transparent;
+outline: none;
+margin: 0px 4px;
+
+}
+.todobuttons button:active
+{
+border: none;
+background-color:transparent;
+outline: none;
+margin: 0px 4px;
+
+}
+.todobuttons button .fa-trash-alt
+{
+    color: rgb(175, 3, 3);
+    padding: 5px;
+    border: 1px solid rgb(196, 194, 194);
+
+
+}
+.todobuttons button .fa-check-double
+{
+    color: rgb(15, 165, 1);
+    padding: 5px;
+    border: 1px solid rgb(196, 194, 194);
+
+
+}
+.fa-reply-all{
+
+    color: rgb(235, 147, 15);
+    padding: 5px;
+    border: 1px solid rgb(196, 194, 194);
+}
+.task-header h3{
+font-weight: 600;
+
+
+}
+.task-header ::after
+{
+    display: block;
+    content: "";
+    height: 3px;
+    width: 30px;
+
+    background-color: rgb(235, 147, 15);;
+   
+    border-radius: 50%;
+}
