@@ -14,6 +14,7 @@ body{
     color: #23272B;
 
 }
+
 .main-header::before{
       display: block;
     content: "";
@@ -138,12 +139,15 @@ font-weight: 600;
 {
     width: 100%;
     height: 50px;
-    background-color: #23272B;
+    background-color: rgb(35, 39, 43);
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
-    position: fixed;
-    bottom: 0;
+  
+  
    
+}
+.tasks{
+    margin-bottom: 100px;
 }

@@ -13,8 +13,10 @@ const db = firebase.firestore();
 
 const list = document.querySelector('.pending')
 const listc = document.querySelector('.completed')
+let listchange=''
 
 list.addEventListener('click', e => {
+    listchange='pending';
     console.log(e.target.classList)
 
     console.log(e.target.parentElement)
@@ -33,23 +35,20 @@ list.addEventListener('click', e => {
     else if (e.target.classList.contains('com')) {
         // console.log("completed") shipt task in completed list
         const id = e.target.parentElement.getAttribute('data-id')
+        const newdatedate = firebase.firestore.Timestamp.fromDate(new Date());
         db.collection('todolist').doc(id).update({
 
-            status: true
+            status: true,
+            endDate: newdatedate
         })
             .then(e => { console.log("status changed") })
             .catch(err => { console.log('err') })
-
-
-
-
-
-
-    }
+            }
 
 
 })
 listc.addEventListener('click', e => {
+    listchange='completed';
     console.log(e.target.classList)
 
     console.log(e.target.parentElement)
@@ -69,11 +68,11 @@ listc.addEventListener('click', e => {
     else if (e.target.classList.contains('retry')) {
         // console.log("completed") shipt task in completed list
         const id = e.target.parentElement.getAttribute('data-id')
-        const tdate = firebase.firestore.Timestamp.fromDate(new Date());
+        
         db.collection('todolist').doc(id).update({
 
             status: false,
-            endDate: tdate
+            
         })
             .then(e => { console.log("status changed") })
             .catch(err => { console.log('err') })
@@ -89,56 +88,51 @@ listc.addEventListener('click', e => {
 })
 
 
-const start = () => {
+const start = (docid,docdata) => { 
 
-
-    db.collection('todolist').get().then(snapshot => {
-        snapshot.docs.forEach(element => {
-
-            if (element.data().status === false) {
+            if (docdata.status === false) {
                 let html = `
-                 <li class="row my-1 px-4   ">
+                 <li class="row my-1 px-4 " data-id="${docid}">
                             <div
                                 class="col-md-10 task-box col-10 border d-flex flex-column flex-md-row align-items-start p-2 justify-content-center align-items-md-center  justify-content-md-between">
 
                                 <div>
                                     <i class="fas fa-history"></i>
-                                    <span class=" taskname ml-2">${element.data().taskname}</span>
+                                    <span class=" taskname ml-2">${docdata.taskname}</span>
                                 </div>
                                 <div>
-                                    <span class="date ml-4 ml-md-0">${element.data().taskdate.toDate().toLocaleString()}</span>
+                                    <span class="date ml-4 ml-md-0">${docdata.taskdate.toDate().toLocaleString()}</span>
                                 </div>
                             </div>
                             <div class="col-md-2 col-2 d-flex align-items-center p-2 justify-content-start todobuttons">
-                                <button data-id="${element.id}"><i class="del far fa-trash-alt"></i></button>
-                                <button data-id="${element.id}"><i class="com fas fa-check-double"></i></button>
+                                <button data-id="${docid}"><i class="del far fa-trash-alt"></i></button>
+                                <button data-id="${docid}"><i class="com fas fa-check-double"></i></button>
                             </div>
 
 
-                        </li>
-    `
+                        </li>    `
                 list.innerHTML += html
             }
-            else if (element.data().status === true) {
+                        else if (docdata.status === true) {
 
                 let html = `
 
-                 <li class="row px-4 my-1 data-id="${element.id} ">
+                 <li class="row px-4 my-1"  data-id="${docid}">
                                 <div
                                     class="col-md-10 task-box col-10 border d-flex flex-column flex-md-row align-items-start p-2 justify-content-center align-items-md-center  justify-content-md-between">
 
                                     <div>
                                         <i class="fas fa-check-double"></i>
-                                        <span class=" taskname ml-2">${element.data().taskname}</span>
+                                        <span class=" taskname ml-2">${docdata.taskname}</span>
                                     </div>
                                     <div>
-                                        <span class="date ml-4 ml-md-0">${element.data().endDate.toDate().toLocaleString()}</span>
+                                        <span class="date ml-4 ml-md-0">${docdata.endDate.toDate().toLocaleString()}</span>
                                     </div>
                                 </div>
                                 <div
                                     class="col-md-2 col-2 d-flex align-items-center p-2 justify-content-start todobuttons">
-                                    <button data-id="${element.id}"><i class=" del far fa-trash-alt"></i></button>
-                                    <button data-id="${element.id}"><i class="retry fas fa-reply-all"></i></button>
+                                    <button data-id="${docid}"><i class=" del far fa-trash-alt"></i></button>
+                                    <button data-id="${docid}"><i class="retry fas fa-reply-all"></i></button>
 
                                 </div>
 
@@ -150,20 +144,16 @@ const start = () => {
             }
 
 
-        });
+      
 
 
 
-    }).catch(err =>
-
-        console.log("thi is exception", err)
-
-    )
+    
 }
 
 
 
-start();
+
 // add task in db
 
 // access controls
@@ -191,7 +181,122 @@ form.addEventListener('submit', (e) => {
 
 })
 
+const delFromList=(docid)=>
+{
+    let ss=null
+if(listchange==='pending')
+{
+       ss =document.querySelectorAll('.pending li');
+}
+else if(listchange==='completed')
+{
+   ss=document.querySelectorAll('.completed li');
+}
 
+
+ss.forEach(li=>{
+  
+    console.log(li)
+
+    if(li.getAttribute('data-id')===docid){
+    li.remove();
+    console.log(li)
+
+        console.log('del from list')
+    }
+})
+
+}
+
+const shift=(docid,docdata)=>{
+
+    delFromList(docid,docdata)
+    if(listchange==='pending')
+{
+    console.log(docdata)
+
+    
+    let html = `
+
+    <li class="row px-4 my-1"  data-id="${docid}">
+                   <div
+                       class="col-md-10 task-box col-10 border d-flex flex-column flex-md-row align-items-start p-2 justify-content-center align-items-md-center  justify-content-md-between">
+
+                       <div>
+                           <i class="fas fa-check-double"></i>
+                           <span class=" taskname ml-2">${docdata.taskname}</span>
+                       </div>
+                       <div>
+                           <span class="date ml-4 ml-md-0">${docdata.endDate.toDate().toLocaleString()}</span>
+                       </div>
+                   </div>
+                   <div
+                       class="col-md-2 col-2 d-flex align-items-center p-2 justify-content-start todobuttons">
+                       <button data-id="${docid}"><i class=" del far fa-trash-alt"></i></button>
+                       <button data-id="${docid}"><i class="retry fas fa-reply-all"></i></button>
+
+                   </div>
+
+
+               </li>
+
+`
+   listc.innerHTML += html
+
+      
+}
+else if(listchange==='completed')
+{
+    let html = `
+                 <li class="row my-1 px-4 " data-id="${docid}">
+                            <div
+                                class="col-md-10 task-box col-10 border d-flex flex-column flex-md-row align-items-start p-2 justify-content-center align-items-md-center  justify-content-md-between">
+
+                                <div>
+                                    <i class="fas fa-history"></i>
+                                    <span class=" taskname ml-2">${docdata.taskname}</span>
+                                </div>
+                                <div>
+                                    <span class="date ml-4 ml-md-0">${docdata.taskdate.toDate().toLocaleString()}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-2 d-flex align-items-center p-2 justify-content-start todobuttons">
+                                <button data-id="${docid}"><i class="del far fa-trash-alt"></i></button>
+                                <button data-id="${docid}"><i class="com fas fa-check-double"></i></button>
+                            </div>
+
+
+                        </li>    `
+                list.innerHTML += html
+}
+    
+    
+    
+}
+
+
+db.collection('todolist').onSnapshot(snapshot=>{
+snapshot.docChanges().forEach(change=>{
+    const docs=change.doc
+    if(change.type==='added')
+    {
+        start(docs.id,docs.data())
+    }
+    if(change.type==='removed') 
+    {
+        delFromList(docs.id)
+
+    }  
+    if(change.type==='modified')
+
+    {
+        shift(docs.id,docs.data())
+    }
+   
+})
+
+
+})
 
 
 
