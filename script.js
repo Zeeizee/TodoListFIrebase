@@ -155,13 +155,28 @@ const start = (docid,docdata) => {
 
 
 // add task in db
-
-// access controls
 const form = document.querySelector('form')
+const msg = document.querySelector('.msg')
 
 form.addEventListener('submit', (e) => {
     e.preventDefault()
     const tname = form.listitem.value;
+
+    if(tname==="")
+    {   msg.classList.remove('invisible')
+        msg.classList.add('visible')
+     
+        setTimeout(()=>{
+            msg.classList.remove('visible')
+            msg.classList.add('invisible')
+            console.log("hello")
+
+
+        },5000)
+        console.log("going return")
+        return;
+
+    }
     const tdate = firebase.firestore.Timestamp.fromDate(new Date());
 
 
@@ -180,6 +195,7 @@ form.addEventListener('submit', (e) => {
 
 
 })
+// delete from list
 
 const delFromList=(docid)=>
 {
@@ -207,6 +223,7 @@ ss.forEach(li=>{
 })
 
 }
+// updating completed task and pending task
 
 const shift=(docid,docdata)=>{
 
